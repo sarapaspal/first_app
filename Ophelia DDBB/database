@@ -1,0 +1,22 @@
+- estancias
+-- ID
+-- nombre
+-- alto
+-- ancho
+
+- dispositivo
+-- ID
+-- nombre
+-- estado
+-- ID estancia
+-- posx
+-- posy
+
+- historico
+-- ID dispositivo
+-- fecha
+-- valor
+
+create table estancia(id integer, nombre varchar(15), alto integer, ancho integer);
+create table dispositivo(id integer, nombre varchar(15), estado integer, id_Estancia integer, posx integer, posy integer);
+create table histórico(id_dispositivo integer, fecha text, valor integer);

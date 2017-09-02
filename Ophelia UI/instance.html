@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+
+  <style>
+  a:hover, a:active {
+      text-decoration: none;
+  }
+  a:link, a:hover, a:active, a:visited {
+    color: black;
+  }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-2">
+            <a href="index.html" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+          </div>
+          <div class="col-xs-5">
+            <h4>Nombre estancia</h4>
+          </div>
+          <div class="col-xs-5 text-right">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#adddevice">
+              Añadir dispositivo
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div class="panel-body">
+        <p>Aquí podrás ver un listado de los dispositivos conectados en la estancia X.</p>
+        <p><b>Toca un aparato para conocer más detalles.</b></p>
+      </div>
+
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="row">
+            <a href="device.html" role="button" class="col-xs-7">
+                Lampara 1
+            </a>
+            <div class="col-xs-3">
+              <span class="label label-success">Encendido</span>
+            </div>
+            <div class="col-xs-2">
+              <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editdevice">
+                <span class="glyphicon glyphicon-wrench"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- modal botón añadir dispositivo-->
+  <div class="modal" id="adddevice" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Nuevo dispositivo</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="name">Nombre del dispositivo</label>
+              <input type="text" class="form-control" id="name" placeholder="Nombre">
+            </div>
+            <div class="form-group">
+              <label for="width">Coordenada x del dispositivo</label>
+              <input type="number" class="form-control" id="width" placeholder="Ancho" min="1">
+            </div>
+            <div class="form-group">
+              <label for="height">Coordenada y del dispositivo</label>
+              <input type="number" class="form-control" id="name" placeholder="Alto" min="1">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal botón editar dispositivo-->
+  <div class="modal" id="editdevice" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Editar dispositivo X</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="name">Nombre del dispositivo</label>
+              <input type="text" class="form-control" id="name" placeholder="Nombre">
+            </div>
+            <div class="form-group">
+              <label for="width">Coordenada x del dispositivo</label>
+              <input type="number" class="form-control" id="width" placeholder="Ancho" min="1">
+            </div>
+            <div class="form-group">
+              <label for="height">Coordenada y del dispositivo</label>
+              <input type="number" class="form-control" id="name" placeholder="Alto" min="1">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

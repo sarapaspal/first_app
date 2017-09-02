@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-2">
+            <a href="device.html" type="button" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+          </div>
+          <div class="col-xs-10">
+            <h4>Histórico</h4>
+          </div>
+        </div>
+
+      </div>
+      <div class="panel-body">
+        <p>Histórico de datos del disposito X.</p>
+      </div>
+      <table class="table table-condensed">
+        <tr>
+          <th>Fecha</th>
+          <th>Valor</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- modal botón añadir estancia-->
+  <div class="modal" id="adddevice" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Nueva estancia</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="name">Nombre del dispositivo</label>
+              <input type="text" class="form-control" id="name" placeholder="Nombre">
+            </div>
+            <div class="form-group">
+              <label for="width">Coordenada x del dispositivo</label>
+              <input type="number" class="form-control" id="width" placeholder="Ancho" min="1">
+            </div>
+            <div class="form-group">
+              <label for="height">Coordenada y del dispositivo</label>
+              <input type="number" class="form-control" id="name" placeholder="Alto" min="1">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

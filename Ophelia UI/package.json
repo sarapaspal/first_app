@@ -1,0 +1,10 @@
+{
+  "name": "Ophelia",
+  "version": "0.1",
+  "main": "index.html",
+  "window": {
+    "toolbar": false,
+    "width": 480,
+    "height": 320
+  }
+}
