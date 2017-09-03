@@ -67,11 +67,10 @@ def delete_estancia(id):
 @app.route("/estancia/<int:id>/dispositivos", methods=['GET'])
 def get_dispositivos_list(id):
     try:
-        dispositivos = db.getAll("dispositivo", {"id_Estancia": id})
+        dispositivos = db.getAll("dispositivo", "id_Estancia", id)
         if not len(dispositivos):
             return "No content", 204
     except Exception as e:
-        print e
         return "Internal server error.", 500
 
     return json.dumps(dispositivos), 200
@@ -83,10 +82,11 @@ def get_dispositivo(id_disp):
         if not len(dispositivo):
             return "No content", 204
     except Exception as e:
+        print e
         return "Internal server error.", 500
 
     return json.dumps(dispositivo), 200
-
+''' 
 @app.route("/estancia/<int:id>/dispositivo/<int:id_dips>", methods=['POST'])
 def create_dispositivo():
     nombre_disp = request.form.get("nombre_disp")
@@ -111,7 +111,7 @@ def create_dispositivo():
         return json.dumps(dispositivo), 200
     return "Bad request.", 400
 
-''' @app.route("/estancia/<int:id>/dispositivo/<int:id_dips>", methods=['PUT'])
+@app.route("/estancia/<int:id>/dispositivo/<int:id_dips>", methods=['PUT'])
 def edit_dispositivo(id_dips):
     try:
         estancia = db.get("estancia", {"data":data} ,{"id_dips": id_dips}, {"value":value})
@@ -121,7 +121,7 @@ def edit_dispositivo(id_dips):
         return "Internal server error.", 500
 
     return json.dumps(estancia), 200
-'''
+
 
 @app.route("/estancia/<int:id>/dispositivo/<int:id_dips>", methods=['DELETE'])
 def delete_dispositivo(id_dips):
@@ -171,7 +171,7 @@ def delete_data(id_hist):
         return "Internal server error.", 500
 
     return "Ok", 200
-
+'''
 def main():
     app.run(host="0.0.0.0", port=5000, debug=True)
 

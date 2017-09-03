@@ -1,0 +1,119 @@
+import random
+
+def get_data_TV (id_estado):
+    if id_estado == 1:
+        value= random.randint (60,80)
+        return value
+    elif id_estado == 0:
+        value= 0
+        return value
+    elif id_estado == 2:
+        value= random.randint (7,13)
+        return value
+
+def get_lamp1 (id_estado):
+    if id_estado == 1:
+        value= random.randint (90,105)
+        return value
+    elif id_estado == 0:
+        value= 0
+        return value
+    elif id_estado == 2:
+        value= random.randint (7,13)
+        return value
+
+def get_frige (id_estado):
+    if id_estado == 1:
+        value= random.randint (640,660)
+        return value
+    elif id_estado == 0:
+        value= 0
+        return value
+    elif id_estado == 2:
+        value= random.randint (7,13)
+        return value
+
+def get_vitro (id_estado):
+    if id_estado == 1:
+        value= random.randint (1780,1820)
+        return value
+    elif id_estado == 0:
+        value= 0
+        return value
+    elif id_estado == 2:
+        value= random.randint (7,13)
+        return value
+
+def get_horno (id_estado):
+    if id_estado == 1:
+        value= random.randint (985,1015)
+        return value
+    elif id_estado == 0:
+        value= 0
+        return value
+    elif id_estado == 2:
+        value= random.randint (7,13)
+        return value
+
+def get_micro (id_estado):
+    if id_estado == 1:
+        value= random.randint (580,615)
+        return value
+    elif id_estado == 0:
+        value = random.randint(2, 6)
+        return value
+    elif id_estado == 2:
+        value= random.randint (2,6)
+        return value
+
+def get_lamp2 (id_estado):
+    if id_estado == 1:
+        value= random.randint (60,80)
+        return value
+    elif id_estado == 0:
+        value= 0
+        return value
+    elif id_estado == 2:
+        value= random.randint (7,13)
+        return value
+
+def get_pc (id_estado):
+    if id_estado == 1:
+        value= random.randint (105,135)
+        return value
+    elif id_estado == 0:
+        value = random.randint(3, 9)
+        return value
+    elif id_estado == 2:
+        value= random.randint (3,9)
+        return value
+
+def get_lamp3V (id_estado):
+    if id_estado == 1:
+        value= random.randint (55,75)
+        return value
+    elif id_estado == 0:
+        value= 0
+        return value
+    elif id_estado == 2:
+        value= random.randint (7,13)
+        return value
+
+def get_lavadora (id_estado):
+    if id_estado == 1:
+        value= random.randint (785,815)
+        return value
+    elif id_estado == 0:
+        value= 0
+        return value
+    elif id_estado == 2:
+        value= random.randint (7,13)
+        return value
+
+
+
+if __name__ == '__main__':
+    id_estado = 0
+    for id_estado in range(0, 3):
+        value = get_data_TV(id_estado)
+        print "En estado %d consume %d" % (id_estado, value)
