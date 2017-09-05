@@ -75,20 +75,8 @@ def get_dispositivos_list(id):
 
     return json.dumps(dispositivos), 200
 
-@app.route("/estancia/<int:id>/dispositivo/<int:id_dips>", methods=['GET'])
-def get_dispositivo(id_disp):
-    try:
-        dispositivo = db.get("dispositivo", {"id_dips": id_disp})
-        if not len(dispositivo):
-            return "No content", 204
-    except Exception as e:
-        print e
-        return "Internal server error.", 500
-
-    return json.dumps(dispositivo), 200
-''' 
-@app.route("/estancia/<int:id>/dispositivo/<int:id_dips>", methods=['POST'])
-def create_dispositivo():
+@app.route("/estancia/<int:id>", methods=['POST'])
+def create_dispositivo(id):
     nombre_disp = request.form.get("nombre_disp")
     estado = request.form.get("estado")
     posX = request.form.get("posX")
@@ -96,10 +84,11 @@ def create_dispositivo():
 
     if nombre_disp and estado and posX and posY:
         dispositivo = {
-            "nombre_disp": nombre_disp,
+            "nombre": nombre_disp,
             "estado": estado,
-            "posX": posX,
-            "posY": posY
+            "posx": posX,
+            "posy": posY,
+            "id_Estancia": id
         }
 
         try:
@@ -111,31 +100,53 @@ def create_dispositivo():
         return json.dumps(dispositivo), 200
     return "Bad request.", 400
 
-@app.route("/estancia/<int:id>/dispositivo/<int:id_dips>", methods=['PUT'])
-def edit_dispositivo(id_dips):
+@app.route("/estancia/<int:id>/dispositivo/<int:id_disp>", methods=['GET'])
+def get_dispositivo(id, id_disp):
     try:
-        estancia = db.get("estancia", {"data":data} ,{"id_dips": id_dips}, {"value":value})
-        if not len(estancia):
+        dispositivo = db.get("dispositivo", {"id": id_disp})
+        if not len(dispositivo):
             return "No content", 204
+        if dispositivo['id_Estancia'] != id:
+            return "Wrong input", 404
     except Exception as e:
+        print e
         return "Internal server error.", 500
 
-    return json.dumps(estancia), 200
+    return json.dumps(dispositivo), 200
+
+@app.route("/estancia/<int:id>/dispositivo/<int:id_disp>", methods=['PUT'])
+def edit_dispositivo(id, id_disp):
+
+    nombre = request.form.get("nombre")
+
+    if nombre:
+        try:
+            db.update("dispositivo", nombre, "id", id_disp)
+        except Exception as e:
+            return "Internal server error.", 500
+    return "Bad request.", 400
 
 
-@app.route("/estancia/<int:id>/dispositivo/<int:id_dips>", methods=['DELETE'])
-def delete_dispositivo(id_dips):
+@app.route("/estancia/<int:id>/dispositivo/<int:id_disp>", methods=['DELETE'])
+def delete_dispositivo(id, id_disp):
+
+    dispositivo = db.get("dispositivo", {"id": id_disp})
+
+    if dispositivo['id_Estancia'] == id:
+
+        try:
+            db.delete("dispositivo", {"id": id_disp})
+        except Exception as e:
+            return "Internal server error.", 500
+
+        return "Ok", 200
+    else:
+        return "Wrong input", 404
+
+@app.route("/estancia/<int:id>/dispositivo/<int:id_disp>/historial", methods=['GET'])
+def get_historial(id, id_disp):
     try:
-        db.delete("dispositivo", {"id_dips": id_dips})
-    except Exception as e:
-        return "Internal server error.", 500
-
-    return "Ok", 200
-
-@app.route("/estancia/<int:id>/dispositivo/<int:id_dips>/historial", methods=['GET'])
-def get_historial(id_disp):
-    try:
-        historial = db.get("historico", {"id_dips": id_disp})
+        historial = db.getAll("historico", "id_dispositivo", id_disp)
         if not len(historial):
             return "No content", 204
     except Exception as e:
@@ -143,19 +154,19 @@ def get_historial(id_disp):
 
     return json.dumps(historial), 200
 
-@app.route("/estancia/<int:id>/dispositivo/<int:id_dips>/historial", methods=['DELETE'])
-def delete_historial(id_dips):
+@app.route("/estancia/<int:id>/dispositivo/<int:id_disp>/historial", methods=['DELETE'])
+def delete_historial(id, id_disp):
     try:
-        db.delete("historico", {"id_dips": id_dips})
+        db.delete("historico", {"id_dispositivo": id_disp})
     except Exception as e:
         return "Internal server error.", 500
 
     return "Ok", 200
 
 @app.route("/estancia/<int:id>/dispositivo/<int:id_dips>/historial/<int:id_hist>", methods=['GET'])
-def get_data(id_hist):
+def get_data(id, id_dips, id_hist):
     try:
-        data = db.get("historico", {"id_hist": id_hist})
+        data = db.get("historico", {"id": id_hist})
         if not len(data):
             return "No content", 204
     except Exception as e:
@@ -164,14 +175,14 @@ def get_data(id_hist):
     return json.dumps(data), 200
 
 @app.route("/estancia/<int:id>/dispositivo/<int:id_dips>/historial/<int:id_hist>", methods=['DELETE'])
-def delete_data(id_hist):
+def delete_data(id, id_dips, id_hist):
     try:
-        db.delete("historico", {"id_hist": id_hist})
+        db.delete("historico", {"id": id_hist})
     except Exception as e:
         return "Internal server error.", 500
 
     return "Ok", 200
-'''
+
 def main():
     app.run(host="0.0.0.0", port=5000, debug=True)
 
