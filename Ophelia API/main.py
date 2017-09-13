@@ -15,6 +15,17 @@ def get_estancia_list():
         estancias = db.getAll("estancia")
         if not len(estancias):
             return "No content", 204
+
+        for estancia in estancias:
+            id = estancia.get('id')
+            disp = db.getAll('dispositivo', 'id_Estancia', id)
+
+            estancia["dispositivos"] = {
+                "on": len(filter(lambda d: d.get("estado") == 1, disp)),
+                "off": len(filter(lambda d: d.get("estado") == 0, disp)),
+                "standby": len(filter(lambda d: d.get("estado") == 2, disp))
+            }
+
     except Exception as e:
         return "Internal server error.", 500
 
@@ -116,14 +127,25 @@ def get_dispositivo(id, id_disp):
 
 @app.route("/estancia/<int:id>/dispositivo/<int:id_disp>", methods=['PUT'])
 def edit_dispositivo(id, id_disp):
+    allowed = ["nombre", "posx", "posy"]
+    form = dict(request.form)
+    petitions = form.keys()
 
-    nombre = request.form.get("nombre")
+    fails = filter(lambda p: p not in allowed or not form.get(p), petitions)
 
-    if nombre:
-        try:
-            db.update("dispositivo", nombre, "id", id_disp)
-        except Exception as e:
-            return "Internal server error.", 500
+    if len(fails):
+        return "Bad request.", 400
+
+    data = {}
+    for p in petitions:
+        data[p] = request.form.get(p)
+
+    try:
+        db.update("dispositivo", data, "id", id_disp)
+        return "Ok", 200
+    except Exception as e:
+        print e
+        return "Internal server error.", 500
     return "Bad request.", 400
 
 
