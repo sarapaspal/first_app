@@ -37,14 +37,12 @@
         </div>
 
       </div>
-      <div class="panel-body">
+      <div id="dispositivos-descripcion" class="panel-body">
         <p>Aquí podrás ver un listado de los dispositivos conectados en la estancia X.</p>
         <p><b>Toca un aparato para conocer más detalles.</b></p>
       </div>
 
-      <div class="list-group">
-        <div id="lista-dispositivos" class="list-group-item">
-        </div>
+      <div id="lista-dispositivos" class="list-group">
       </div>
     </div>
   </div>
@@ -64,18 +62,22 @@
               <input type="text" class="form-control" id="name" placeholder="Nombre">
             </div>
             <div class="form-group">
+              <label for="estado">Estado del dispositivo</label>
+              <input type="number" class="form-control" id="estado" placeholder="Estado" min="0" max="2">
+            </div>
+            <div class="form-group">
               <label for="width">Coordenada x del dispositivo</label>
-              <input type="number" class="form-control" id="width" placeholder="Ancho" min="1">
+              <input type="number" class="form-control" id="posX" placeholder="Ancho" min="1">
             </div>
             <div class="form-group">
               <label for="height">Coordenada y del dispositivo</label>
-              <input type="number" class="form-control" id="name" placeholder="Alto" min="1">
+              <input type="number" class="form-control" id="posY" placeholder="Alto" min="1">
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" id="crear-dispositivo" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
@@ -87,28 +89,32 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Editar dispositivo X</h4>
+          <h4 class="modal-title">Editar dispositivo</h4>
         </div>
         <div class="modal-body">
           <form>
             <input type="hidden" id="hidden-id">
             <div class="form-group">
               <label for="name">Nombre del dispositivo</label>
-              <input type="text" class="form-control" id="name" placeholder="Nombre">
+              <input type="text" class="form-control" id="edit-name" placeholder="Nombre">
+            </div>
+            <div class="form-group">
+              <label for="estado">Estado del dispositivo</label>
+              <input type="number" class="form-control" id="edit-estado" placeholder="Estado" min="0" max="2">
             </div>
             <div class="form-group">
               <label for="width">Coordenada x del dispositivo</label>
-              <input type="number" class="form-control" id="width" placeholder="Ancho" min="1">
+              <input type="number" class="form-control" id="edit-posX" placeholder="Ancho" min="1">
             </div>
             <div class="form-group">
               <label for="height">Coordenada y del dispositivo</label>
-              <input type="number" class="form-control" id="name" placeholder="Alto" min="1">
+              <input type="number" class="form-control" id="edit-posY" placeholder="Alto" min="1">
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" id="edit-dispositivo" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
@@ -116,7 +122,7 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="/vendor/js/http.js"></script>
   <script src="/app/controllers/instance.js"></script>
+  <script src="/vendor/js/http.js"></script>
 </body>
 </html>

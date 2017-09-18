@@ -13,11 +13,11 @@
       <div class="panel-heading">
         <div class="row">
           <div class="col-xs-2">
-            <a href="instance.html" type="button" class="btn btn-default">
+            <a href="instance.html?" id="return-a-disp" type="button" class="btn btn-default">
               <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
           </div>
-          <div class="col-xs-10">
+          <div id="nombre-dispositivo" class="col-xs-10">
             <h4>Dispositivo</h4>
           </div>
         </div>
@@ -26,11 +26,16 @@
       <div class="panel-body">
         <p>Métricas del dispositivo seleccionado.</p>
       </div>
-      <table class="table">
+      <table id="tabla-stats" class="table">
         <tr>
           <th>Instantáneo</th>
           <th>Media semanal</th>
           <th>Varianza</th>
+        </tr>
+        <tr>
+            <td>43</td>
+            <td>40</td>
+            <td>12</td>
         </tr>
       </table>
 
@@ -44,5 +49,7 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="/app/controllers/device.js"></script>
+  <script src="/vendor/js/http.js"></script>
 </body>
 </html>
