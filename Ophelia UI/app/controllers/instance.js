@@ -16,16 +16,24 @@
 		return params;
 	}
 
-	function injectID(e) {
-		return e.target.getAttribute("data-id");
+	function injectID(id_disp, id_estancia) {
+		document.getElementById("hidden-id").value = id_disp;
+
+		http.get("http://localhost:5000/estancia/" + id_estancia + "/dispositivo/" + id_disp, true, null, function(response) {
+			if (response.success) {
+				var data = response.data;
+
+				var name = document.getElementById("edit-name").value = data.nombre,
+					posX = document.getElementById("edit-posX").value = data.posx,
+					posY = document.getElementById("edit-posY").value = data.posy;
+			}
+		}, function() {});
 	}
 
 	function init() {
-
 		params = parseParams(window.location.href);
-		console.log(params.id);
 
-		http.get("http://localhost:5000/estancia/" + params.id + "/dispositivos", true, null, handlerListaDisp, function() {});
+		http.get("http://localhost:5000/estancia/" + params.id + "/dispositivo", true, null, handlerListaDisp, function() {});
 
 		http.get("http://localhost:5000/estancia/" + params.id, true, null, function(response) {
 			if (response.success) {
@@ -43,24 +51,15 @@
 
 					list.innerHTML = "<p>Aquí podrás ver un listado de los dispositivos conectados en la estancia " + data.nombre + ".</p>" +
 			        "<p><b>Toca un aparato para conocer más detalles.</b></p>"
+					catchEditEvents(params.id);
 			}
 		}, function() {});
-
-		var editButtons = document.getElementsByClassName("edit-device");
-		for (var i = 0; i < editButtons.length; i++) {
-			var button = editButtons[i],
-			id = button.getAttribute("data-id");
-
-			button.addEventListener('click', injectID);
-		}
 
 		var formNewDispositivo = document.getElementById("crear-dispositivo");
 		formNewDispositivo.addEventListener('click', handlerNewDispositivo);
 
 		var formEditDispositivo = document.getElementById("edit-dispositivo");
 		formEditDispositivo.addEventListener('click', editDispositivo);
-
-
 	}
 
 	function handlerListaDisp(response) {
@@ -134,37 +133,40 @@
 		}
 	}
 
+	function catchEditEvents(id_estancia) {
+		var editButtons = document.getElementsByClassName("edit-device");
+		for (var i = 0; i < editButtons.length; i++) {
+			var button = editButtons[i],
+			id = button.getAttribute("data-id");
+			button.addEventListener('click', function(e) {
+				var id_disp = e.target.getAttribute("data-id");
+				injectID(id_disp, id_estancia);
+			});
+		}
+	}
+
 	function editDispositivo() {
 		// Ver cómo conseguir el ID del disositvo a editar
 		var name = document.getElementById("edit-name").value,
-			estado = document.getElementById("edit-estado").value,
 			posX = document.getElementById("edit-posX").value,
-			posY = document.getElementById("edit-posY").value;
+			posY = document.getElementById("edit-posY").value,
+			id_disp = document.getElementById("hidden-id").value;
 
-		if (Boolean(name) && Boolean(estado) && Boolean(posX) && Boolean(posY)) {
+		if (Boolean(name) && Boolean(posX) && Boolean(posY)) {
 			var url = "http://localhost:5000/estancia/" + params.id + "/dispositivo/" + id_disp,
-				json = true,
+				json = false,
 				data = {
-					"nombre_disp": name,
-					"estado": estado,
-					"posX": posX,
-					"posY": posY
+					"nombre": name,
+					"posx": posX,
+					"posy": posY
 				};
 
 			http.put(url, json, data, function (response) {
 				if (response.success) {
-					alert("Creado!");
-					var list = document.getElementById("lista-dispositivos"),
-						item = "<div class=list-group-item> <div class='row'>" +
-						  "<a href='device.html?id=" + response.data.id + "' role='button' class='col-xs-9'>" + response.data.nombre + "</a>" +
-						  "<div class='col-xs-1'><span class='label label-default'>" + response.data.estado + "</span></div>" +
-						  "<div class='col-xs-2'><button type='button' data-id='" + response.data.id + "' class='edit-device btn btn-default text-right " +
-						  "btn-sm' data-toggle='modal' data-target='#editdevice'>Editar</button></div>" +
-						  "</div> </div>";
-
-					list.innerHTML += item;
+					alert("Actualizado!");
+					init();
 				} else {
-					alert("Error al crear la estancia...");
+					alert("Error al actualizar la estancia...");
 				}
 			}, function() {});
 		} else {

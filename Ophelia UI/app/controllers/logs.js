@@ -29,13 +29,13 @@
 			if (response.success) {
 				var data = response.data,
 					list = document.getElementById("nombre-dispositivo-descripcion");
-
 					list.innerHTML = "<p>Histórico de datos del dispositivo " + data.nombre + ".</p>";
 			}
 		}, function() {});
 
-        http.get("http://localhost:5000/estancia/" + params.id + "/dispositivo/" + params.id + "historial", true, null, handlerListaValores, function() {});
+        http.get("http://localhost:5000/estancia/" + params.id_estancia + "/dispositivo/" + params.id + "/historial", true, null, handlerListaValores, function() {});
 
+		document.getElementById('return-a-metrics').href += "id_estancia=" + params.id_estancia + "&id=" + params.id;
     }
 
     function handlerListaValores(response) {
@@ -43,12 +43,9 @@
 			var data = response.data,
 				list = document.getElementById("tabla-valores");
 
-			list.innerHTML = "";
-			for (var i = 0; i < data.length; i++) {
-				var item = "<tr><th>Fecha</th><th>Valor</th></tr>" +
-                "<tr><td>" + data.fecha + "</td><td>" + data.valor + "</td></tr>";
-
-				list.innerHTML += item;
+			list.innerHTML = "<tr><th>Fecha</th><th>Valor [V]</th></tr>";
+			for (var i = 0; i < data.length; i++){
+				list.innerHTML += "<tr><td>" + data[i].fecha + "</td><td>" + data[i].valor + "</td></tr>";
 			}
 		} else {
 			alert("Error!");

@@ -1,7 +1,10 @@
 import json
+from datetime import datetime, timedelta
 from database import DB
 from flask import Flask
 from flask import request
+
+DATE_FMT = "%d-%m-%Y %H:%M:%S"
 
 app = Flask(__name__)
 
@@ -75,16 +78,16 @@ def delete_estancia(id):
     return "Ok", 200
 
 
-@app.route("/estancia/<int:id>/dispositivos", methods=['GET'])
-def get_dispositivos_list(id):
+@app.route("/estancia/<int:id>/dispositivo", methods=['GET'])
+def get_dispositivo_list(id):
     try:
-        dispositivos = db.getAll("dispositivo", "id_Estancia", id)
-        if not len(dispositivos):
+        dispositivo = db.getAll("dispositivo", "id_Estancia", id)
+        if not len(dispositivo):
             return "No content", 204
     except Exception as e:
         return "Internal server error.", 500
 
-    return json.dumps(dispositivos), 200
+    return json.dumps(dispositivo), 200
 
 @app.route("/estancia/<int:id>", methods=['POST'])
 def create_dispositivo(id):
@@ -138,7 +141,7 @@ def edit_dispositivo(id, id_disp):
 
     data = {}
     for p in petitions:
-        data[p] = request.form.get(p)
+        data[p] = request.form.get(p).encode("utf-8")
 
     try:
         db.update("dispositivo", data, "id", id_disp)
@@ -171,10 +174,55 @@ def get_historial(id, id_disp):
         historial = db.getAll("historico", "id_dispositivo", id_disp)
         if not len(historial):
             return "No content", 204
+
+        for reg in historial:
+            reg["fecha"] = datetime.strptime(reg.get("fecha"), DATE_FMT) or None
+
+        historial = sorted(historial, key=lambda reg: reg.get("fecha"), reverse=True)
     except Exception as e:
+        print e
         return "Internal server error.", 500
 
-    return json.dumps(historial), 200
+    return json.dumps(historial, default=str), 200
+
+@app.route("/estancia/<int:id>/dispositivo/<int:id_disp>/metricas", methods=['GET'])
+def get_stat(id, id_disp):
+    try:
+        historial = db.getAll("historico", "id_dispositivo", id_disp)
+        if not len(historial):
+            return "No content", 204
+
+        for reg in historial:
+            reg["fecha"] = datetime.strptime(reg.get("fecha"), DATE_FMT) or None
+
+        historial = sorted(historial, key=lambda reg: reg.get("fecha"), reverse=True)
+
+        lastest = historial[0]
+        limit = datetime.today() - timedelta(days=7)
+
+        average = 0
+        variance = 0
+
+        last_week = list(filter(lambda reg: reg.get("fecha") > limit, historial))
+        if last_week:
+            for reg in last_week:
+                average += reg.get("valor")
+            average = average/len(last_week)
+
+            for reg in last_week:
+                variance += (reg.get("valor") - average) ** 2
+            variance = variance/len(last_week)
+
+        data = {
+            "instantaneo": lastest.get("valor"),
+            "media": average,
+            "varianza": variance
+        }
+        return json.dumps(data, default=str), 200
+    except Exception as e:
+        print e
+
+    return "Internal server error.", 500
 
 @app.route("/estancia/<int:id>/dispositivo/<int:id_disp>/historial", methods=['DELETE'])
 def delete_historial(id, id_disp):
