@@ -56,7 +56,51 @@ def create_estancia():
         estancia["id"] = db.lastid
         return json.dumps(estancia), 200
     return "Bad request.", 400
+"""
+@app.route("/estancia/consumo", methods=['GET'])
+def get_consumo():
+    try:
+        historial = db.getAll("historico")
 
+        consumo = 0;
+
+        if not len(historial):
+            return "No content", 204
+
+        historial = sorted(historial, key=lambda id_disp: id_disp.get("id_dispositivo"))
+
+        for id_disp in historial:
+            for reg in historial:
+                reg["fecha"] = datetime.strptime(reg.get("fecha"), DATE_FMT) or None
+
+            historial = sorted(historial, key=lambda reg: reg.get("fecha"), reverse=True)
+
+            consumo_ind = historial[0]
+            consumo += consumo_ind.get("valor")
+
+    except Exception as e:
+        return "Internal server error.", 500
+
+    return json.dumps(consumo), 200
+
+@app.route("/estancia/anual", methods=['GET'])
+def get_consumo():
+    try:
+        historial = db.getAll("historico")
+
+        if not len(historial):
+            return "No content", 204
+
+        for reg in historial:
+            reg["fecha"] = datetime.strptime(reg.get("fecha"), DATE_FMT) or None
+
+            historial = sorted(historial, key=lambda reg: reg.get("fecha"), reverse=True)
+
+    except Exception as e:
+        return "Internal server error.", 500
+
+    return json.dumps(consumo), 200
+"""
 @app.route("/estancia/<int:id>", methods=['GET'])
 def get_estancia(id):
     try:
@@ -76,18 +120,6 @@ def delete_estancia(id):
         return "Internal server error.", 500
 
     return "Ok", 200
-
-
-@app.route("/estancia/<int:id>/dispositivo", methods=['GET'])
-def get_dispositivo_list(id):
-    try:
-        dispositivo = db.getAll("dispositivo", "id_Estancia", id)
-        if not len(dispositivo):
-            return "No content", 204
-    except Exception as e:
-        return "Internal server error.", 500
-
-    return json.dumps(dispositivo), 200
 
 @app.route("/estancia/<int:id>", methods=['POST'])
 def create_dispositivo(id):
@@ -113,6 +145,19 @@ def create_dispositivo(id):
             dispositivo["id"] = db.lastid
         return json.dumps(dispositivo), 200
     return "Bad request.", 400
+
+
+
+@app.route("/estancia/<int:id>/dispositivo", methods=['GET'])
+def get_dispositivo_list(id):
+    try:
+        dispositivo = db.getAll("dispositivo", "id_Estancia", id)
+        if not len(dispositivo):
+            return "No content", 204
+    except Exception as e:
+        return "Internal server error.", 500
+
+    return json.dumps(dispositivo), 200
 
 @app.route("/estancia/<int:id>/dispositivo/<int:id_disp>", methods=['GET'])
 def get_dispositivo(id, id_disp):
@@ -185,6 +230,15 @@ def get_historial(id, id_disp):
 
     return json.dumps(historial, default=str), 200
 
+@app.route("/estancia/<int:id>/dispositivo/<int:id_disp>/historial", methods=['DELETE'])
+def delete_historial(id, id_disp):
+    try:
+        db.delete("historico", {"id_dispositivo": id_disp})
+    except Exception as e:
+        return "Internal server error.", 500
+
+    return "Ok", 200
+
 @app.route("/estancia/<int:id>/dispositivo/<int:id_disp>/metricas", methods=['GET'])
 def get_stat(id, id_disp):
     try:
@@ -223,15 +277,6 @@ def get_stat(id, id_disp):
         print e
 
     return "Internal server error.", 500
-
-@app.route("/estancia/<int:id>/dispositivo/<int:id_disp>/historial", methods=['DELETE'])
-def delete_historial(id, id_disp):
-    try:
-        db.delete("historico", {"id_dispositivo": id_disp})
-    except Exception as e:
-        return "Internal server error.", 500
-
-    return "Ok", 200
 
 @app.route("/estancia/<int:id>/dispositivo/<int:id_dips>/historial/<int:id_hist>", methods=['GET'])
 def get_data(id, id_dips, id_hist):
